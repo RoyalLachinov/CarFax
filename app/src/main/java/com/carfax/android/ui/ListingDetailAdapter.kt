@@ -9,7 +9,6 @@ import com.carfax.android.data.model.ListingDetail
 import com.carfax.android.databinding.ItemListingDetailBinding
 import com.carfax.android.databinding.ItemListingDetailFooterBinding
 import com.carfax.android.databinding.ItemListingDetailHeaderBinding
-import com.carfax.android.util.ViewHelper.loadImage
 
 class ListingDetailAdapter(
     private var listing: Listing,
@@ -69,7 +68,6 @@ class ListingDetailAdapter(
                 val binding = holder.binding
                 listing.let {
                     binding.listing = it
-                    binding.imageViewCar.loadImage(it.imageUrl!!)
                 }
             }
             is ItemViewHolder -> {

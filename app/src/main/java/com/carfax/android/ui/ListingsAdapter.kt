@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.carfax.android.data.model.Listing
 import com.carfax.android.databinding.ItemListingsBinding
 import com.carfax.android.util.DiffUtilCallback
-import com.carfax.android.util.ViewHelper.loadImage
 
 class ListingsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -44,8 +43,6 @@ class ListingsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         listing.let {
             binding.listing = it
-            binding.imageViewCar.loadImage(it.imageUrl!!)
-
         }
 
         binding.parentListingCardLayout.setOnClickListener {

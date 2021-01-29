@@ -6,12 +6,14 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
+import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.carfax.android.R
 
 object ViewHelper {
 
+    @JvmStatic @BindingAdapter("imageUrl")
     fun ImageView.loadImage(imageUrl: String) {
         Glide.with(this.context)
             .load(imageUrl)
