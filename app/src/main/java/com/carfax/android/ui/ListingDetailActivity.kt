@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ListingDetailActivity : AppCompatActivity() {
+class ListingDetailActivity : AppCompatActivity(),ListingDetailAdapter.DealerPhoneClick {
 
     @Inject
     lateinit var listingsViewModel: ListingsViewModel
@@ -55,27 +55,18 @@ class ListingDetailActivity : AppCompatActivity() {
                 ListingDetail("Fuel", it.fuel)
             )
 
-            val listingDetailAdapter = ListingDetailAdapter(listing, detailList)
+            val listingDetailAdapter = ListingDetailAdapter(this, listing, detailList)
             viewBindingDetailActivity.recyclerViewListingDetail.adapter = listingDetailAdapter
-
-            listingDetailAdapter.dealerPhoneClick = object : ListingDetailAdapter.DealerPhoneClick {
-                override fun onDealerCallClicked(phoneNumber: String) {
-                    val callIntent =
-                        Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null))
-
-                    if (ActivityCompat.checkSelfPermission(
-                            this@ListingDetailActivity,
-                            Manifest.permission.CALL_PHONE
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        ViewHelper.requestPhonePermission(this@ListingDetailActivity)
-                        return
-                    }
-                    startActivity(callIntent)
-                }
-            }
-
         }
+    }
 
+    override fun onDealerCallClicked(phoneNumber: String) {
+        val callIntent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null))
+        if (ActivityCompat.checkSelfPermission(this@ListingDetailActivity,
+                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ViewHelper.requestPhonePermission(this@ListingDetailActivity)
+            return
+        }
+        startActivity(callIntent)
     }
 }

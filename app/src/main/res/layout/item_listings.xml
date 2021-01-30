@@ -6,6 +6,10 @@
         <variable
             name="listing"
             type="com.carfax.android.data.model.Listing" />
+
+        <variable
+            name="listingClickListener"
+            type="com.carfax.android.ui.ListingsAdapter.ListingItemClickEvent" />
     </data>
 
     <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -17,6 +21,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="10dp"
         android:elevation="6dp"
+        android:onClick="@{() -> listingClickListener.onItemClicked(listing)}"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="10dp"
         app:cardElevation="6dp"
@@ -140,6 +145,7 @@
                 android:textColor="@color/color_car_fax"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:onClick="@{() -> listingClickListener.onDealerCallClicked(listing.dealer.phone)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/horizontalLine" />

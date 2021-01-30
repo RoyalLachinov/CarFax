@@ -11,12 +11,12 @@ import com.carfax.android.databinding.ItemListingDetailFooterBinding
 import com.carfax.android.databinding.ItemListingDetailHeaderBinding
 
 class ListingDetailAdapter(
-    private var listing: Listing,
-    private var listings: MutableList<ListingDetail>
+    private val dealerPhoneClick: DealerPhoneClick,
+    private val listing: Listing,
+    private val listings: MutableList<ListingDetail>
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    lateinit var dealerPhoneClick: DealerPhoneClick
     interface DealerPhoneClick {
         fun onDealerCallClicked(phoneNumber: String)
     }
@@ -79,9 +79,9 @@ class ListingDetailAdapter(
             }
             is FooterViewHolder -> {
                 val binding = (holder).binding
-                binding.tvCallDealer.setOnClickListener {
-                    dealerPhoneClick.onDealerCallClicked(listing.dealer!!.phone)
-                }
+                binding.listing = listing
+                binding.dealerPhoneClickListener = dealerPhoneClick
+
             }
         }
 

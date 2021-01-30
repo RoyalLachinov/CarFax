@@ -9,9 +9,8 @@ import com.carfax.android.data.model.Listing
 import com.carfax.android.databinding.ItemListingsBinding
 import com.carfax.android.util.DiffUtilCallback
 
-class ListingsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ListingsAdapter(private val clickListenerListing: ListingItemClickEvent) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    lateinit var clickListenerListing: ListingItemClickEvent
     interface ListingItemClickEvent {
         fun onItemClicked(listing: Listing)
         fun onDealerCallClicked(phoneNumber:String)
@@ -40,18 +39,8 @@ class ListingsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val listing = listings[position]
         val binding = (holder as ViewHolder).binding
-
-        listing.let {
-            binding.listing = it
-        }
-
-        binding.parentListingCardLayout.setOnClickListener {
-            clickListenerListing.onItemClicked(listing)
-        }
-
-        binding.tvCallDealer.setOnClickListener {
-            clickListenerListing.onDealerCallClicked(listing.dealer?.phone!!)
-        }
+        binding.listing = listing
+        binding.listingClickListener = clickListenerListing
     }
 
     override fun getItemCount(): Int = listings.size

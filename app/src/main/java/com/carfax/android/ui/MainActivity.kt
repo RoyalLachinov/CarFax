@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ListingsAdapter.ListingItemClickEvent {
 
     @Inject
     lateinit var listingsViewModel: ListingsViewModel
@@ -34,37 +34,31 @@ class MainActivity : AppCompatActivity() {
         Log.d("listingViewModelIns", listingsViewModel.toString())
 
         listingsViewModel.getListingFromServer(NetworkUtil.isConnectedToNetwork(this))
-        val listingsAdapter = ListingsAdapter()
+        val listingsAdapter = ListingsAdapter(this)
 
         viewBindingMainActivity.recyclerViewListings.adapter = listingsAdapter
         listingsViewModel.getListingsFromDb().observe(this@MainActivity) {
             listingsAdapter.setData(it)
         }
 
+    }
 
-        listingsAdapter.clickListenerListing = object : ListingsAdapter.ListingItemClickEvent {
-            override fun onItemClicked(listing: Listing) {
-                val intent = Intent(this@MainActivity, ListingDetailActivity::class.java)
-                intent.putExtra("listingId",listing.id)
-                startActivity(intent)
-            }
+    override fun onItemClicked(listing: Listing) {
+        val intent = Intent(this@MainActivity, ListingDetailActivity::class.java)
+        intent.putExtra("listingId", listing.id)
+        startActivity(intent)
+    }
 
-            override fun onDealerCallClicked(phoneNumber: String) {
+    override fun onDealerCallClicked(phoneNumber: String) {
+        val callIntent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null))
 
-                val callIntent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null))
-
-                if (ActivityCompat.checkSelfPermission(
-                        this@MainActivity,
-                        Manifest.permission.CALL_PHONE
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    ViewHelper.requestPhonePermission(this@MainActivity)
-                    return
-                }
-                startActivity(callIntent)
-            }
+        if (ActivityCompat.checkSelfPermission(this@MainActivity,
+                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ViewHelper.requestPhonePermission(this@MainActivity)
+            return
         }
-
+        startActivity(callIntent)
     }
 
 }
